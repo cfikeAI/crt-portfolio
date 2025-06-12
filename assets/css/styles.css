@@ -1,0 +1,197 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #000;
+  color: #00ff99;
+  
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 1.3rem;
+  overflow: hidden;
+}
+
+#crt-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image:
+    repeating-linear-gradient(to bottom, rgba(0,255,153,0.04) 1px, transparent 3px),
+    url("../images/overlay.png");; /* keep noise */
+  background-size: 100% 2px, cover;
+  mix-blend-mode: screen;
+  opacity: 0.15;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+#boot-screen {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #00ff99;
+  background-color: #000;
+  white-space: pre-wrap;
+  font-size: 1rem;
+  text-shadow: 0 0 5px #00ff99;
+}
+
+#terminal {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  padding: 2rem;
+  box-sizing: border-box;
+  background: radial-gradient(ellipse at center, #000 60%, #040404 100%);
+  gap: 2rem;
+
+  /*glow*/
+  box-shadow: inset 0 0 100px rgba(0, 255, 0, 0.07),
+              inset 0 0 150px rgba(0, 255, 0, 0.05);
+}
+
+.folder-pane {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #00ff99;
+  padding-right: 2rem;
+}
+
+.folder-label {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 4px #00ff99;
+}
+
+.folder-pane button {
+  background: transparent;
+  border: 1px solid #00ff99;
+  color: #00ff99;
+  font-size: 1rem;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  text-align: left;
+  text-shadow: 0 0 3px #00ff99;
+  transition: background 0.2s ease;
+}
+
+.folder-pane button:hover {
+  background-color: #00ff99;
+  color: #000;
+}
+
+.folder-pane button.active {
+  background-color: #00ff99;
+  color: #000;
+  font-weight: bold;
+  box-shadow: 0 0 5px #00ff99;
+}
+
+
+.display-pane {
+  width: 75%;
+  height: 100%;
+  padding: 2rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;   /* vertical centering */
+  align-items: center;       /* horizontal centering */
+  position: relative;
+  border: 1px solid #00ff99;
+  box-shadow: 0 0 20px rgba(0, 255, 153, 0.2);
+  background-color: rgba(0, 0, 0, 0.6);  /* subtle darkness */
+}
+
+.terminal-output {
+  width: 90%;
+  max-width: 1100px;
+  padding: 2rem;
+  background: transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  min-height: 60vh;
+}
+
+.terminal-line {
+  white-space: pre-wrap;
+  text-shadow: 0 0 4px #00ff99;
+  line-height: 1.9;
+  margin-bottom: 0.7rem;
+  font-size: 1.35rem;
+
+  /*flicker*/
+  animation: crtFlicker 0.15s infinite alternate;
+}
+
+.terminal-line:first-child {
+  color: #32ff6a;
+  font-size: 1.4rem;
+  text-shadow: 0 0 6px #00ff99, 0 0 12px #00ff99;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+@keyframes crtFlicker {
+  from { opacity: 1; }
+  to { opacity: 0.97; }
+}
+
+.footer-line {
+  margin-top: auto;
+  padding-top: 1rem;
+  font-size: 0.85rem;
+  text-align: left;
+  color: #00ff99;
+  text-shadow: 0 0 3px #00ff99;
+}
+
+.display-pane a {
+  color: #00ff99; /* or whatever green/CRT color you want */
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+.display-pane a:hover {
+  color: #ffffff;
+}
+
+.display-pane a:visited {
+  color: #66ffcc;
+}
+
+.blink {
+  display: inline-block;
+  width: 8px;
+  margin-left: 3px;
+  color: #00ff99;
+  animation: blink-cursor 0.8s steps(1, start) infinite;
+}
+
+@keyframes blink-cursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+
+@keyframes blink-caret {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+a {
+  color: #0db20d;
+  text-decoration: none;
+  text-shadow: 0 0 2px #00ff99;
+  
+}
+a:hover {
+  text-decoration: underline;
+  text-shadow: 0 0 10px #00ff99;
+}

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Chad Fike | CRT Terminal Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles3.css" />
+</head>
+<body>
+
+  <div id="crt-overlay"></div>
+
+  <div id="boot-screen">
+    <pre>
+[BOOT] Initializing BIOS...
+[BOOT] Scanning memory sectors...
+[BOOT] Checking disk integrity...
+[OK] CRT Terminal Interface Ready.
+[OK] Chad Fike Portfolio v1.79 Loaded.
+    </pre>
+  </div>
+  <audio id="key-sound" src="../sounds/click0.mp3" preload="auto"></audio>
+  <button onclick="document.getElementById('key-sound').play()">Test Sound</button>
+
+  <div id="terminal" style="display: none;">
+    <div class="folder-pane">
+      <div class="folder-label">~/PORTFOLIO</div>
+      <button onclick="loadContent('about', event)">about.txt</button>
+      <button onclick="loadContent('experience', event)">experience.log</button>
+      <button onclick="loadContent('projects', event)">projects.md</button>
+      <button onclick="loadContent('skills', event)">skills.cfg</button>
+      <button onclick="loadContent('contact', event)">contact.sh</button>
+    </div>
+
+    <div class="display-pane">
+      <div id="terminal-output" class="terminal-output"></div>
+      <div class="footer-line">CTRL+C to abort | CRT Terminal Interface v1.79</div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+  setTimeout(() => {
+    document.getElementById("boot-screen").style.display = "none";
+    document.getElementById("terminal").style.display = "flex";
+
+    // ✅ Ensure audio system is ready, and simulate a real click event
+    setTimeout(() => {
+      const aboutBtn = document.querySelector("button[onclick*='about']");
+      if (aboutBtn) {
+        aboutBtn.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      }
+    }, 200);
+  }, 3000);
+});
+
+
+    const contentMap = {
+      about: `cat about.txt
+
+Cloud-focused IT professional with hands-on experience automating Azure environments using Bicep, cloud-init, and CLI.
+
+Strong in scripting backend tasks, troubleshooting infra issues, and building reproducible deployments.
+
+I graduated from University of Maryland Baltimore County (UMBC) with a Masters's of Science in Information Systems with a focus on Machine Learning and Cloud Infrastructure in 2024.`,
+
+
+      experience: `cat experience.log
+Outlier.ai – AI Project Contributor (2024–Present)
+• Optimized LLM workflows
+• Top 5% performer on QA accuracy
+
+Prometric – Systems Analyst (2022–2024)
+• Automated 10+ processes via Python & PowerShell
+• Streamlined SQL and infra troubleshooting`,
+
+      projects: `cat projects.md
+Azure Infra Automation
+
+
+
+● Deployed a public-facing virtual machine using Azure Bicep and Azure CLI 
+● Configured custom network security groups (NSGs), role-based access control (RBAC), and DNS label bindings 
+● Mounted a managed disk and provisioned persistent storage with automation via cloud-init on Ubuntu 
+● Installed and configured an NGINX web server to serve a static GitHub-hosted website 
+● Followed Infrastructure-as-Code best practices and modular template design to allow repeatable deployments 
+
+➤ <a href="https://github.com/cfikeAI/azure-infra-scalable-webapp" target="_blank">github.com/cfikeAI/azure-infra-scalable-webapp</a>
+
+AI-Powered Library Manager  
+➤ <a href="https://github.com/cfikeAI/AI-Library-Manager" target="_blank">github.com/cfikeAI/AI-Library-Manager</a>
+
+All Projects are available on my Github Profile - link under contact.sh`,
+      skills: `cat skills.cfg
+[✓] Python  
+[✓] PowerShell  
+[✓] Azure CLI  
+[✓] Docker  
+[✓] Git / GitHub  
+[✓] FastAPI  
+[✓] SQL  
+[✓] Terraform`,
+
+      contact: `cat contact.sh
+GitHub: <a href="https://github.com/cfikeAI" target="_blank">cfikeAI</a>  
+LinkedIn: <a href="https://linkedin.com/in/chad-fike" target="_blank">chad-fike</a>  
+Email: <a href="mailto:cfike607@gmail.com">cfike607@gmail.com</a>`
+    };
+
+    function loadContent(key, event = null) {
+  const output = document.getElementById("terminal-output");
+  output.innerHTML = "";
+
+  document.querySelectorAll(".folder-pane button").forEach((btn) =>
+    btn.classList.remove("active")
+  );
+  if (event) event.target.classList.add("active");
+  else document.querySelector("button[onclick*='" + key + "']")?.classList.add("active");
+
+  const lines = contentMap[key].split("\n");
+
+  let lineIndex = 0;
+  function typeNextLine() {
+    if (lineIndex >= lines.length) return;
+
+    const line = lines[lineIndex++];
+    const lineElem = document.createElement("div");
+    lineElem.className = "terminal-line";
+    output.appendChild(lineElem);
+    output.scrollTop = output.scrollHeight;
+
+    // ✅ If line contains a full anchor tag, inject as-is without typing
+    if (line.includes("<a")) {
+      lineElem.innerHTML = line;
+      typeNextLine(); // continue immediately
+    } else {
+      typeLine(line, lineElem, () => typeNextLine());
+    }
+  }
+
+  typeNextLine();
+}
+
+function typeLine(line, element, callback, i = 0) {
+  // Remove any previous cursor
+  const existingCursor = document.querySelector(".blink");
+  if (existingCursor) existingCursor.remove();
+
+  function typeChar() {
+    if (i < line.length) {
+      element.innerHTML += line[i++];
+
+      const sound = document.getElementById("key-sound");
+      if (sound) {
+        const clone = sound.cloneNode();
+        clone.volume = 0.1;
+        clone.play().catch(() => {});
+      }
+
+      const delay = Math.floor(Math.random() * 20) + 8; // ⌛ Random delay
+      setTimeout(typeChar, delay);
+    } else {
+      // Add blinking cursor after line is fully typed
+      const cursor = document.createElement("span");
+      cursor.className = "blink";
+      cursor.textContent = "|";
+      element.appendChild(cursor);
+
+      if (callback) callback();
+    }
+  }
+
+  typeChar();
+}
+
+
+
+
+  </script>
+</body>
+</html>
